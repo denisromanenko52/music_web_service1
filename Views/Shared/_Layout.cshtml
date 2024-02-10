@@ -1,0 +1,210 @@
+﻿@using Microsoft.AspNetCore.Http
+@{
+    var isAuthenticated = Context.Session.GetString("Email");
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- basic -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- bootstrap css -->
+    <link rel="stylesheet" type="text/css" href="~/css/bootstrap.min.css">
+    <!-- style css -->
+    <link rel="stylesheet" type="text/css" href="~/css/style.css">
+    <!-- Responsive-->
+    <link rel="stylesheet" href="~/css/responsive.css">
+    <!-- fevicon -->
+    <link rel="icon" href="~/images/fevicon.png" type="image/gif" />
+    <!-- Scrollbar Custom CSS -->
+    <link rel="stylesheet" href="~/css/jquery.mCustomScrollbar.min.css">
+    <!-- Tweaks for older IEs-->
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+    <!-- owl stylesheets -->
+    <link href="https://fonts.googleapis.com/css?family=Orbitron:400,500,600,700|Poppins:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/owl.carousel.min.css">
+    <link rel="stylesoeet" href="~/css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
+</head>
+<body>
+    <div class="header_section">
+        <div class="container-fluid padding_0">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <a class="logo">MUSIC</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-nav" style="display: flex; justify-content: flex-end;">
+
+                    @if (isAuthenticated == null)
+                    {
+                        <ul class="navbar-nav" style="display: flex;">
+                            <li class="nav-item">
+                                <button id="auth_button"><img src="~/images/user-icon.png"> <span class="padding_left_10">Login</span></button>
+                            </li>
+                        </ul>
+                    }
+                    else
+                    {
+                        <ul class="navbar-nav" style="display: flex;">
+                            <li class="nav-item" style="margin-left: 10px;">
+                                <button id="logout_button"><img src="~/images/user-icon.png"> <span class="padding_left_10">Logout</span></button>
+                            </li>
+                        </ul>
+                    }
+                </div>
+            </nav>
+        </div>
+    </div>
+    <div class="banner_section layout_padding">
+        <div id="main_slider" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <div class="container">
+                        <form class="example">
+                            <input id="search-input" type="text">
+                            <button id="search-button" type="button"><i class="fa fa-search"></i></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="review_section_2">
+        <div id="tracks-list">
+            @RenderBody()
+        </div>
+    </div>
+    <div class="footer_section layout_padding">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-sm-6">
+                    <h2 class="footer_text">About</h2>
+                    <p class="lorem_text">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration</p>
+                </div>
+                <div class="col-lg-3 col-sm-6">
+                    <h2 class="footer_text">Music</h2>
+                    <div class="hollywood_menu">
+                        <ul>
+                            <li><a>Hollywood</a></li>
+                            <li><a>Hollywood</a></li>
+                            <li><a>Live event</a></li>
+                            <li><a>Recodring</a></li>
+                            <li><a>Video</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6">
+                    <h2 class="useful_text">Useful link </h2>
+                    <div class="hollywood_menu">
+                        <ul>
+                            <li><a>Home</a></li>
+                            <li><a>News</a></li>
+                            <li><a>Music</a></li>
+                            <li><a>Videos</a></li>
+                            <li><a>Newsletter</a></li>
+                            <li><a>Events</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6">
+                    <h2 class="useful_text">Contact Us</h2>
+                    <div class="location_text"><img src="~/images/map-icon.png"><span class="padding_left_10"><a>104 loram ipusm</a></span></div>
+                    <div class="location_text"><img src="~/images/call-icon.png"><span class="padding_left_10"><a>( +71 69582478 )</a></span></div>
+                    <div class="location_text"><img src="~/images/mail-icon.png"><span class="padding_left_10"><a>demo@gmail.com</a></span></div>
+                    <div class="social_icon">
+                        <ul>
+                            <li><a><img src="~/images/fb-icon.png"></a></li>
+                            <li><a><img src="~/images/twitter-icon.png"></a></li>
+                            <li><a><img src="~/images/instagram-icon.png"></a></li>
+                            <li><a><img src="~/images/linkedin-icon.png"></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="copyright_section">
+        <div class="container">
+            <p class="copyright_text">2024</p>
+        </div>
+    </div>
+</body>
+</html>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#search-button').click(function () {
+            var searchTerm = $('#search-input').val();
+            $.post('/Tracks/SearchTracks', { searchTerm: searchTerm }, function (data) {
+                $('#tracks-list').html(data);
+            });
+        });
+    });
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    document.querySelector('#auth_button').addEventListener('click', function () {
+        $.post('/Account/Index', function () {
+            window.location.href = '/Account/Index';
+        });
+    });
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    document.querySelector('#logout_button').addEventListener('click', function () {
+        $.post('/Account/Logout', function () {
+            window.location.href = '/Account/Logout';
+        });
+    });
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    // Получаем поле ввода по его id
+    var searchInput = document.getElementById('search-input');
+
+    // Добавляем обработчик события на нажатие клавиши
+    searchInput.addEventListener('keydown', function (event) {
+        // Проверяем, была ли нажата клавиша Enter (код клавиши 13)
+        if (event.keyCode === 13) {
+            event.preventDefault(); // Предотвращаем стандартное действие браузера
+
+            return false; // Дополнительная защита от перезагрузки страницы
+        }
+    });
+</script>
+
+<style>
+    .navbar-nav {
+        display: flex;
+        justify-content: flex-end; /* Выравнивание содержимого вправо */
+        list-style: none;
+        padding: 0;
+        margin-left: auto; /* Перемещение контейнера вправо */
+    }
+
+    .nav-item {
+        margin-left: 10px;
+    }
+
+    #auth_button, #logout_button {
+        padding: 5px 10px;
+        background-color: #3498db; /* Цвет фона */
+        color: #fff; /* Цвет текста */
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+    }
+
+        #auth_button img, #logout_button img {
+            width: 20px; /* Размер иконки */
+            margin-right: 5px;
+        }
+</style>

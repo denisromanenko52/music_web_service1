@@ -1,0 +1,69 @@
+﻿@using music_web_service1.Models.Domain;
+
+
+@model List<Track>
+
+@foreach (var track in @Model)
+{
+    <div class="track">
+        <div class="track-info">
+            <h3 class="track-title">@track.Name</h3>
+            <audio class="track-audio" controls>
+                <source src="@track.Audio" type="audio/mpeg" />
+            </audio>
+        </div>
+    </div>
+}
+
+<script>
+    // Объявление переменной track в области видимости верхнего уровня
+    var track;
+
+    // Получение всех аудио элементов на странице
+    var audioElements = document.querySelectorAll('.track-audio');
+
+    // Перебор каждого элемента и установка обработчика события "play"
+    audioElements.forEach(function (audio) {
+        audio.addEventListener('play', function () {
+            var trackName = audio.parentElement.querySelector('.track-title').textContent;
+            var trackAudio = audio.querySelector('source').src; // Получаем URL аудио
+
+            // Создание объекта для хранения значения track-title и audio
+            track = {
+                name: trackName,
+                audio: trackAudio
+            };
+
+            console.log('Отправляем трек на сервер:', track);
+
+            // Отправка прослушанного трека на сервер
+            sendTrack();
+        });
+    });
+
+    // Функция для отправки прослушанного трека на сервер
+    function sendTrack() {
+        console.log('Отправка трека на сервер...', track);
+
+        // Создание XMLHttpRequest объекта
+        var xhr = new XMLHttpRequest();
+
+        // Открытие соединения и настройка запроса
+        xhr.open('POST', '/SearchHistory/SearchHistory', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        // Преобразование объекта в JSON и отправка на сервер
+        xhr.send(JSON.stringify(track));
+
+        // Отслеживание ответа сервера
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    console.log('Прослушанный трек успешно отправлен на сервер');
+                } else {
+                    console.error('Ошибка при отправке прослушанного трека на сервер');
+                }
+            }
+        };
+    }
+</script>

@@ -1,0 +1,35 @@
+﻿
+@model List<SearchHistory>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using Microsoft.AspNetCore.Http
+@using music_web_service1.Models.Domain;
+@{
+    var isAuthenticated = Context.Session.GetString("Email");
+
+    var query = Context.Request.Query;
+    var email = query["email"].ToString();
+
+    if (Model != null && Model.Count > 0 && isAuthenticated == email)
+    {
+        @foreach (var track in Model)
+        {
+            <div class="track">
+                <div class="track-info">
+                    <h3 class="track-title">@track.Name</h3>
+                    <audio class="track-audio" controls>
+                        <source src="@track.Audio" type="audio/mpeg" />
+                    </audio>
+                </div>
+            </div>
+        }
+
+    }
+    else
+    {
+        <p>Вход заблокирован</p>
+    }
+}

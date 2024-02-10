@@ -1,0 +1,29 @@
+version: "3.1"
+services:
+  app:
+    image: musicwebservice1:dev
+    restart: always
+    ports:
+      - 5000:80
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionString=Host=localhost;Port=5432;Database=Music;Username=postgres;Password=postgres
+    depends_on:
+      - db
+      - rabbitmq
+
+  db:
+    image: postgres:14
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=Music
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    restart: always
+    ports:
+      - 5672:5672
+      - 15672:15672
